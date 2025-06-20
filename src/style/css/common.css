@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("/public/fonts/Pretendard-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/public/fonts/Pretendard-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  outline-style: none;
+  box-sizing: border-box;
+}
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+button {
+  font-family: "Inter", "Pretendard", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body,
+* {
+  font-family: "Inter", "Pretendard", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+  color: #000;
+}
+
+strong {
+  font-weight: 700;
+}
