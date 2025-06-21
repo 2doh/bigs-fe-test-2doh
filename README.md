@@ -6,3 +6,4 @@
 - axios : 서버통신
 - zustand : 전역상태관리
 - styled-component / scss : 스타일링
+- react-hook-form / zod : 리렌더링 최소화와ㅏ 유효성 검사
