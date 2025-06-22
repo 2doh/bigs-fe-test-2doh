@@ -30,7 +30,8 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "react/prop-types": "off",
-    "no-undef": "warn",
+    "no-undef": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
   },
 };

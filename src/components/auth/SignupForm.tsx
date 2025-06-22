@@ -2,27 +2,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { authLogin } from "../../apis/auth/auth";
-import { AuthFormProps } from "../../interface/auth/AuthInterface";
-import { authBaseSchema, SigninFormData } from "../../schema/authSchema";
+import { authSignup } from "../../apis/auth/auth";
+import { AuthSignupFormProps } from "../../interface/auth/AuthInterface";
+import { SignupFormData, signupSchema } from "../../schema/authSchema";
 import FormBtn from "../common/FormBtn";
 import InputField from "./InputField";
-import Cookies from "js-cookie";
-import { userAuthStore } from "../../store/userStore";
 
-const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
+const SignupForm = ({ labelArr, titleObj }: AuthSignupFormProps) => {
   const navi = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SigninFormData>({
-    resolver: zodResolver(authBaseSchema),
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = async (data: SigninFormData) => {
-    const result = await authLogin(data);
+  const onSubmit = async (data: SignupFormData) => {
+    const result = await authSignup(data);
     if (result?.status === false && result.code === 400) {
       alert(result.message);
     }
@@ -30,9 +28,8 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
       alert(result.message);
     }
     if (result?.status === true) {
-      Cookies.set("refresh", result.data?.data.refreshToken);
-      userAuthStore.getState().setAccessToken(result.data?.data.accessToken);
-      navi("/board");
+      alert("회원가입 되었습니다.");
+      navi("/auth/login");
     }
   };
 
@@ -42,7 +39,7 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
         <FormGroupStyle key={idx}>
           <InputField
             label={itm.label}
-            type={itm.type as keyof SigninFormData}
+            type={itm.type as keyof SignupFormData}
             register={register}
             name={itm.name}
             error={errors[itm.name]?.message as string | undefined}
@@ -51,13 +48,13 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
       ))}
       <FormBtn title={titleObj.title} />
       <LinkContainerStyle>
-        <LinkStyle to="/auth/signup">회원가입</LinkStyle>
+        <LinkStyle to="/auth/login">이미 계정이 있습니까?</LinkStyle>
       </LinkContainerStyle>
     </FormStyle>
   );
 };
 
-export default AuthForm;
+export default SignupForm;
 
 const FormStyle = styled.form`
   display: flex;
