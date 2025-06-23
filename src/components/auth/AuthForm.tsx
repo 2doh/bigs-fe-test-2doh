@@ -32,6 +32,8 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
     if (result?.status === true) {
       Cookies.set("refresh", result.data?.data.refreshToken);
       userAuthStore.getState().setAccessToken(result.data?.data.accessToken);
+      userAuthStore.getState().setIsLoggedIn(true);
+      // console.log(userAuthStore.getState().accessToken);
       navi("/board");
     }
   };

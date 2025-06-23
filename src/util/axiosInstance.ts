@@ -2,10 +2,7 @@ import axios from "axios";
 import { userAuthStore } from "../store/userStore";
 import Cookies from "js-cookie";
 
-const axiosInstance = axios.create({
-  baseURL: "https://front-mission.bigs.or.kr",
-  withCredentials: true,
-});
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(config => {
   const accessToken = userAuthStore.getState().accessToken;
