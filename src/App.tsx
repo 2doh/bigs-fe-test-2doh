@@ -51,6 +51,8 @@ function App() {
           console.error("토큰 재발급 실패", e);
           alert("로그인 만료되었습니다.");
           Cookies.remove("refresh");
+          Cookies.remove("userName");
+          Cookies.remove("name");
           window.location.href = "/auth/login";
         }
       } else {

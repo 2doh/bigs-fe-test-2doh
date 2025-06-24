@@ -34,6 +34,22 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
       userAuthStore.getState().setAccessToken(result.data?.data.accessToken);
       userAuthStore.getState().setIsLoggedIn(true);
       // console.log(userAuthStore.getState().accessToken);
+
+      const token = result.data?.data.accessToken;
+      if (!token) return;
+      const base64Url = token.split(".")[1];
+      if (!base64Url) return;
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(c => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+          .join(""),
+      );
+      const payload = JSON.parse(jsonPayload);
+      // console.log(payload);
+      Cookies.set("name", payload.name);
+      Cookies.set("userName", payload.username);
       navi("/board");
     }
   };

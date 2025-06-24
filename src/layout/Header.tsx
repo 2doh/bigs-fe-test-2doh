@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../styles/theme";
 import { userAuthStore } from "../store/userStore";
@@ -7,13 +7,25 @@ import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const navi = useNavigate();
+  const [userName, setUserName] = useState<string | undefined>("");
+  const [userMail, setUserMail] = useState<string | undefined>("");
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     Cookies.remove("refresh");
+    Cookies.remove("name");
+    Cookies.remove("userName");
     userAuthStore.getState().setAccessToken("");
     userAuthStore.getState().setIsLoggedIn(false);
     navi("/auth/login");
   };
+
+  useEffect(() => {
+    const userNameStr = Cookies.get("name");
+    const userMailStr = Cookies.get("userName");
+    setUserName(userNameStr);
+    setUserMail(userMailStr);
+  }, []);
+
   return (
     <HeaderWrap>
       <HeaderContainer>
@@ -22,7 +34,12 @@ export const Header = () => {
           <NavStyle href="/board">게시판</NavStyle>
           <NavStyle>마이페이지</NavStyle>
         </NavWrap>
-        <LogoutBtn onClick={e => handleLogout(e)}>로그아웃</LogoutBtn>
+        <UserInfoWrap>
+          {userName && <UserMailAdr>{userMail}</UserMailAdr>}
+          {userName && <UserName>{userName}님</UserName>}
+          <LogoutBtn onClick={e => handleLogout(e)}>로그아웃</LogoutBtn>
+        </UserInfoWrap>
+        {/* <LogoutBtn onClick={e => handleLogout(e)}>로그아웃</LogoutBtn> */}
       </HeaderContainer>
     </HeaderWrap>
   );
@@ -70,4 +87,25 @@ const LogoutBtn = styled.button`
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
+`;
+
+const UserInfoWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const UserName = styled.span`
+  font-weight: 400;
+  color: ${colors.primaryDark};
+  @media screen and (max-width: 400px) {
+    display: none;
+  }
+`;
+
+const UserMailAdr = styled.span`
+  font-weight: 400;
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
 `;

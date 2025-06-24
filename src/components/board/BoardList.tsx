@@ -79,4 +79,7 @@ const PostWrap = styled.div`
   gap: 10px;
   color: #999;
   font-size: 0.9rem;
+  /* @media screen and (max-width: 400px) {
+    display: none;
+  } */
 `;
