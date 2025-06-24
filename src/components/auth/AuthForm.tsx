@@ -51,6 +51,7 @@ const AuthForm = ({ labelArr, titleObj }: AuthFormProps) => {
           />
         </FormGroupStyle>
       ))}
+
       <FormBtn title={titleObj.title} />
       <LinkContainerStyle>
         <LinkStyle to="/auth/signup">회원가입</LinkStyle>

@@ -2,38 +2,72 @@ import styled from "styled-components";
 import { colors } from "../../styles/theme";
 import { BoardList } from "./BoardList";
 import { Pagination } from "./Pagination";
+import { useNavigate } from "react-router-dom";
 
 type BoardLayoutProps = {
   children: React.ReactNode;
   categories: { [key: string]: string };
+  seletedCate: string;
+  setSeletedCate: (category: string) => void;
+  page: number;
+  setPage: (page: number) => void;
 };
 
-export const BoardLayout = ({ children, categories }: BoardLayoutProps) => {
-  const categoryValues = Object.values(categories);
+export const BoardLayout = ({
+  children,
+  categories,
+  seletedCate,
+  setSeletedCate,
+  page,
+  setPage,
+}: BoardLayoutProps) => {
+  const navi = useNavigate();
+
+  const categoryList = ["전체", ...Object.values(categories)];
+
+  const onCateSelect = (e: React.MouseEvent, data: string) => {
+    e.preventDefault();
+    setSeletedCate(data);
+    setPage(0);
+  };
+
+  const handleNavi = () => {
+    navi(`/board/write`);
+  };
+
   return (
-    <Wrap>
+    <WrapStlye>
       {/* <Header></Header> */}
       <BoardTopStyle>
         <TitleStyle>게시판</TitleStyle>
         <BtnWrap>
-          <WriteButton>글쓰기</WriteButton>
-          {/* <LogoutButton>로그아웃</LogoutButton> */}
+          <WriteBtn onClick={() => handleNavi()}>글쓰기</WriteBtn>
         </BtnWrap>
       </BoardTopStyle>
+
       <CategoryList>
-        {categoryValues.map(data => (
-          <Category key={data}>{data}</Category>
+        {categoryList.map(data => (
+          <Category
+            $active={seletedCate === data}
+            key={data}
+            onClick={e => {
+              e.preventDefault();
+              setSeletedCate(data);
+              setPage(0);
+            }}
+          >
+            {data}
+          </Category>
         ))}
       </CategoryList>
+
       <Content>{children}</Content>
-      {/* <br /> */}
-      <BoardList></BoardList>
-      <Pagination></Pagination>
-    </Wrap>
+      <Pagination page={page} setPage={setPage} />
+    </WrapStlye>
   );
 };
 
-const Wrap = styled.div`
+const WrapStlye = styled.div`
   padding: 20px;
   /* min-width: 1200px; */
   width: 100%;
@@ -58,7 +92,7 @@ const BtnWrap = styled.div`
   gap: 1rem;
 `;
 
-const WriteButton = styled.button`
+const WriteBtn = styled.button`
   background-color: ${colors.primary};
   color: #fff;
   padding: 8px 16px;
@@ -72,11 +106,13 @@ const CategoryList = styled.div`
   margin: 20px 0;
 `;
 
-const Category = styled.div`
+const Category = styled.div<{ $active?: boolean }>`
   padding: 6px 12px;
   border: 0.5px solid ${colors.stroke};
   /* border-radius: 8px; */
   cursor: pointer;
+  background-color: ${({ $active }) => ($active ? colors.highlight : "white")};
+  color: ${({ $active }) => ($active ? "#fff" : "#000")};
 
   &:hover {
     background-color: ${colors.highlight};

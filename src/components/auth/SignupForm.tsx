@@ -46,6 +46,9 @@ const SignupForm = ({ labelArr, titleObj }: AuthSignupFormProps) => {
           />
         </FormGroupStyle>
       ))}
+      <Requirements>
+        비밀번호는 8자 이상, 숫자, 영문자, 특수문자(!%*#?&)를 포함해야 합니다
+      </Requirements>
       <FormBtn title={titleObj.title} />
       <LinkContainerStyle>
         <LinkStyle to="/auth/login">이미 계정이 있습니까?</LinkStyle>
@@ -77,4 +80,11 @@ const LinkStyle = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const Requirements = styled.div`
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 12px;
+  line-height: 1.4;
 `;

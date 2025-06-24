@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { BoardLayout } from "../../components/board/BoardLayout";
 import styled from "styled-components";
-import { getCategories } from "../../apis/board/boards";
+import { getCategories, getPostsAll } from "../../apis/board/boards";
 import { userAuthStore } from "../../store/userStore";
+import { BoardList } from "../../components/board/BoardList";
 
 const Board = () => {
   const [categories, setCategories] = useState<{ [key: string]: string }>({});
+  const [seletedCate, setSeletedCate] = useState<string>("전체");
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     const getCate = async () => {
@@ -13,13 +17,38 @@ const Board = () => {
       if (result?.data) {
         setCategories(result.data);
       }
-      console.log(result?.data);
+
+      // console.log(result?.data);
     };
     getCate();
   }, []);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const tempData = {
+        currentPage: page,
+      };
+      const result = await getPostsAll(tempData);
+      // console.log(result);
+
+      if (result?.data?.content) {
+        setPosts(result.data.content);
+      }
+    };
+    getPosts();
+  }, [seletedCate, page]);
+
   return (
     // <BoardWrap>
-    <BoardLayout categories={categories}>게시글</BoardLayout>
+    <BoardLayout
+      categories={categories}
+      seletedCate={seletedCate}
+      setSeletedCate={setSeletedCate}
+      page={page}
+      setPage={setPage}
+    >
+      <BoardList posts={posts} selectedCate={seletedCate}></BoardList>
+    </BoardLayout>
     // </BoardWrap>
   );
 };

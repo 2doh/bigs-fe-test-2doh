@@ -1,23 +1,61 @@
 import styled from "styled-components";
 import { colors } from "../../styles/theme";
+import { getPost } from "../../apis/board/boards";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export const BoardList = () => {
-  const dummyPosts = Array.from({ length: 10 }).map((_, i) => ({
-    id: i + 1,
-    title: `게시글 제목 ${i + 1}`,
-    author: "홍길동",
-    date: "2025-06-23",
-  }));
+type Post = {
+  id: number;
+  title: string;
+  category?: string;
+  createdAt: string;
+};
+
+type BoardListProps = {
+  posts: Post[];
+  selectedCate: string;
+};
+
+export const BoardList = ({ posts, selectedCate }: BoardListProps) => {
+  const navi = useNavigate();
+
+  const formatDate = (data: string): string => {
+    return data.slice(0, 10).replace(/-/g, ".");
+  };
+
+  const handleOnClick = async (data: Post) => {
+    const postId = data.id;
+    const result = await getPost(postId);
+    if (result?.status !== 200) {
+      alert("알 수 없는 에러가 발생했습니다.");
+      return;
+    }
+    navi(`/board/${data.id}`);
+  };
+
+  const categoryMap: { [key: string]: string } = {
+    NOTICE: "공지",
+    FREE: "자유",
+    QNA: "Q&A",
+    ETC: "기타",
+  };
+
+  const filteredPosts =
+    selectedCate === "전체"
+      ? posts
+      : posts.filter(
+          post => categoryMap[post.category ?? "ETC"] === selectedCate,
+        );
 
   return (
     <List>
-      {dummyPosts.map(post => (
-        <Item key={post.id}>
+      {filteredPosts.map(post => (
+        <Item key={post.id} onClick={() => handleOnClick(post)}>
+          <span>{categoryMap[post.category ?? ""]}</span>
           <span>{post.title}</span>
-          <PostMeta>
-            <span>{post.author}</span>
-            <span>{post.date}</span>
-          </PostMeta>
+          <PostWrap>
+            <span>{formatDate(post.createdAt)}</span>
+          </PostWrap>
         </Item>
       ))}
     </List>
@@ -36,7 +74,7 @@ const Item = styled.div`
   cursor: pointer;
 `;
 
-const PostMeta = styled.div`
+const PostWrap = styled.div`
   display: flex;
   gap: 10px;
   color: #999;

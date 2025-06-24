@@ -17,10 +17,11 @@ export const Header = () => {
   return (
     <HeaderWrap>
       <HeaderContainer>
-        <Nav>
-          <NavItem href="/">홈</NavItem>
-          <NavItem href="/board">게시판</NavItem>
-        </Nav>
+        <NavWrap>
+          <NavStyle>홈</NavStyle>
+          <NavStyle href="/board">게시판</NavStyle>
+          <NavStyle>마이페이지</NavStyle>
+        </NavWrap>
         <LogoutBtn onClick={e => handleLogout(e)}>로그아웃</LogoutBtn>
       </HeaderContainer>
     </HeaderWrap>
@@ -48,12 +49,12 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-const Nav = styled.nav`
+const NavWrap = styled.nav`
   display: flex;
   gap: 24px;
 `;
 
-const NavItem = styled.a`
+const NavStyle = styled.a`
   text-decoration: none;
   color: ${colors.grayDark};
   font-weight: 500;
@@ -64,7 +65,7 @@ const NavItem = styled.a`
 `;
 
 const LogoutBtn = styled.button`
-  background-color: #cc263a;
+  background-color: ${colors.red};
   color: #fff;
   padding: 8px 16px;
   border-radius: 8px;
