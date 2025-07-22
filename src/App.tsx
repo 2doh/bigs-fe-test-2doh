@@ -18,14 +18,6 @@ function App() {
   const { setAccessToken, setIsLoggedIn, accessToken } = userAuthStore();
   const [isInitializing, setIsInitializing] = useState(true);
   const isLogin = !!Cookies.get("refresh");
-  // const isLogin = userAuthStore(state => state.isLoggedIn);
-  // console.log(isLogin);
-
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     userAuthStore.getState().setIsLoggedIn(true);
-  //   }
-  // }, []);
 
   useEffect(() => {
     const tryRefreshToken = async () => {
@@ -33,7 +25,7 @@ function App() {
       const refresh = Cookies.get("refresh");
       // accessToken 없고, refreshToken이 있는 경우만 재발급 시도
       if (!accessToken && refresh) {
-        // console.log("토큰재발급");
+        console.log("토큰재발급");
         try {
           const res = await axios.post(
             "https://front-mission.bigs.or.kr/auth/refresh",
@@ -62,9 +54,9 @@ function App() {
     };
 
     tryRefreshToken();
-  }, [accessToken]);
+  }, []);
 
-  if (isInitializing === null) {
+  if (isInitializing) {
     return (
       <LoadingWrap>
         <LoadingSpinner />
@@ -91,7 +83,11 @@ function App() {
             <Route
               path="/"
               element={
-                isLogin ? <Navigate to="/" /> : <Navigate to="/auth/login" />
+                isLogin ? (
+                  <Navigate to="/board" />
+                ) : (
+                  <Navigate to="/auth/login" />
+                )
               }
             />
             <Route
